@@ -1,27 +1,16 @@
 import * as React from 'react';
-import { Consumer, manager } from './dataManager'
+import { context } from './dataManager'
 
-class UserUI extends React.Component {
-    private user$ = manager.inject('user$')
-    constructor(props: any) {
-        super(props)
-        console.log(this.user$)
-    }
-    onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        this.setState({ value: event.target.value })
-    }
+class UserUI extends React.Component<any, any> {
+    private user$ = this.context.inject('user$')
     render() {
+        console.log(this.user$)
         return (
-            <Consumer>
-                {value => {
-                    console.log(value)
-                    return <div>
-                        123
-                    </div>
-                }}
-            </Consumer>
+            <div>
+                123
+            </div>
         );
     }
 }
-
+UserUI.contextType = context;
 export default UserUI;

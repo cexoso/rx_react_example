@@ -9,7 +9,7 @@ class App extends React.Component {
     }
     render() {
         return (
-            <Provider value={manager.content}>
+            <Provider value={manager}>
                 <UserUI />
             </Provider>
 
