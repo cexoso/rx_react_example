@@ -5,10 +5,6 @@ import Page1 from './page1';
 import Page2 from './page2';
 
 class App extends React.Component {
-    state = { value: 1 }
-    onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        this.setState({ value: event.target.value })
-    }
     render() {
         return (
             <Provider value={manager}>
