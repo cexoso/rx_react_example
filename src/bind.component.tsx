@@ -1,28 +1,34 @@
 import * as React from 'react';
-import { Observable, of, iif, BehaviorSubject } from 'rxjs';
+import { of, iif, BehaviorSubject } from 'rxjs';
 import { create, Ioptions } from './lib/rx-react/store'
 import { catchError, map, switchMap } from 'rxjs/operators';
+import { Icreateable } from './lib/rx-react/store'
 
-interface Iprops<T> {
-    $: () => Observable<T>
+
+interface Iprops<U extends Icreateable<any>> {
+    $: { new(): U }
     options?: Ioptions
-    children: (err: Error | undefined, payload: T) => React.ReactElement<any>
+    children: (err: Error | undefined, payload: U extends Icreateable<infer T> ? T : never, instance: U) => React.ReactElement<any>
+
+    // children: (err: Error | undefined, payload: T, instance: B) => React.ReactElement<any>
 }
+
 const defaultOptions: Ioptions = { singleton: true, keepAlive: false }
 
-class Bind<T> extends React.PureComponent<Iprops<T>, { payload?: any, err?: Error }> {
+class Bind<U extends Icreateable<any>> extends React.PureComponent<Iprops<U>, { payload?: any, err?: Error }> {
     private didMount$ = new BehaviorSubject(false)
     state = { payload: undefined, err: undefined }
-    constructor(props: Iprops<T>) {
+    instance: U;
+    constructor(props: Iprops<U>) {
         super(props)
         const { $, options } = this.props
         const opts = { ...defaultOptions, ...options }
-        const origin = create($, opts)
+        this.instance = create($, opts)
         this.didMount$.pipe(
             switchMap(
                 didmount => iif(
                     () => didmount,
-                    origin
+                    this.instance.obs
                 )
             ),
             map<any, { payload: any }>(payload => ({ payload })),
@@ -42,7 +48,7 @@ class Bind<T> extends React.PureComponent<Iprops<T>, { payload?: any, err?: Erro
     render() {
         const { payload, err } = this.state
         const { children } = this.props
-        return payload ? children(err, payload) : "";
+        return payload ? children(err, payload, this.instance) : "";
     }
 }
 

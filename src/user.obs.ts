@@ -1,5 +1,5 @@
-//import { crate } from './lib/rx-react/store'
-import { timer, Subject, merge, of } from 'rxjs'
+import { Icreateable } from './lib/rx-react/store'
+import { timer, Subject, merge, of, Observable } from 'rxjs'
 import { mapTo, map, catchError, startWith } from 'rxjs/operators'
 
 
@@ -10,7 +10,7 @@ const existUsers = [
     { user_id: 4, user_name: '悟空' },
 ]
 
-interface ImaybeUser {
+export interface ImaybeUser {
     payload?: {
         user_id: number
         user_name: string
@@ -18,14 +18,14 @@ interface ImaybeUser {
     err?: Error
     isLoading?: boolean
 }
-export function crateUser$() {
+export class User extends Icreateable<ImaybeUser> {
     // 假如使用该默认用户自动登录
-    const defaultUser = timer(500).pipe(
+    private defaultUser = timer(500).pipe(
         mapTo<number, ImaybeUser>({ payload: { user_id: 1, user_name: '林冲' } })
     )
     // 使用过程中可以随便切换账号
-    const shiftUserId$ = new Subject<number>()
-    const shiftUser$ = shiftUserId$.pipe(
+    private shiftUserId$ = new Subject<number>()
+    private shiftUser$ = this.shiftUserId$.pipe(
         map<number, ImaybeUser>(
             id => {
                 const user = existUsers.find(x => x.user_id === id)
@@ -37,10 +37,13 @@ export function crateUser$() {
         ),
         catchError((err: Error) => of<ImaybeUser>({ err }))
     )
-    return merge(
-        defaultUser,
-        shiftUser$
+    public obs = merge(
+        this.defaultUser,
+        this.shiftUser$
     ).pipe(
         startWith<ImaybeUser>({ isLoading: true })
     )
+    public shiftUser(id: number) {
+        this.shiftUserId$.next(id)
+    }
 }
