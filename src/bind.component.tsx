@@ -6,12 +6,13 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 interface Iprops {
     $: () => Observable<any>
     options?: Ioptions
-    children: (err: Error, payload: any) => React.ReactElement<any>
+    children: (err: Error | undefined, payload: any) => React.ReactElement<any>
 }
 const defaultOptions: Ioptions = { singleton: true, keepAlive: false }
 
-class Bind extends React.PureComponent<Iprops, { payload: any, err: Error }> {
+class Bind extends React.PureComponent<Iprops, { payload?: any, err?: Error }> {
     private didMount$ = new BehaviorSubject(false)
+    state = { payload: undefined, err: undefined }
     constructor(props: Iprops) {
         super(props)
         const { $, options } = this.props
