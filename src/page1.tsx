@@ -7,8 +7,11 @@ class Page1 extends React.Component<any, any> {
         return (
             <div>
                 <Bind $={crateUser$}>
-                    {(err, payload) => {
-                        console.log(err, payload)
+                    {(err, data) => {
+                        if (err) {
+                            console.log(err)
+                        }
+                        console.log(data)
                         return <div>123</div>
                     }}
                 </Bind>

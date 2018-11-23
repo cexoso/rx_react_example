@@ -3,17 +3,17 @@ import { Observable, of, iif, BehaviorSubject } from 'rxjs';
 import { create, Ioptions } from './lib/rx-react/store'
 import { catchError, map, switchMap } from 'rxjs/operators';
 
-interface Iprops {
-    $: () => Observable<any>
+interface Iprops<T> {
+    $: () => Observable<T>
     options?: Ioptions
-    children: (err: Error | undefined, payload: any) => React.ReactElement<any>
+    children: (err: Error | undefined, payload: T) => React.ReactElement<any>
 }
 const defaultOptions: Ioptions = { singleton: true, keepAlive: false }
 
-class Bind extends React.PureComponent<Iprops, { payload?: any, err?: Error }> {
+class Bind<T> extends React.PureComponent<Iprops<T>, { payload?: any, err?: Error }> {
     private didMount$ = new BehaviorSubject(false)
     state = { payload: undefined, err: undefined }
-    constructor(props: Iprops) {
+    constructor(props: Iprops<T>) {
         super(props)
         const { $, options } = this.props
         const opts = { ...defaultOptions, ...options }
@@ -42,7 +42,7 @@ class Bind extends React.PureComponent<Iprops, { payload?: any, err?: Error }> {
     render() {
         const { payload, err } = this.state
         const { children } = this.props
-        return children(err, payload);
+        return payload ? children(err, payload) : "";
     }
 }
 
