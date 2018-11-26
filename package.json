@@ -2,7 +2,7 @@
   "name": "rx_react",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://cexoso.github.io/rx_react_example",
+  "homepage": "https://cexoso.github.io/rx_react_example",
   "dependencies": {
     "@types/jest": "^23.3.9",
     "@types/node": "^10.12.9",
