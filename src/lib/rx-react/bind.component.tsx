@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { of, iif, BehaviorSubject } from 'rxjs';
-import { create, Ioptions } from './lib/rx-react/store'
+import { create, Ioptions } from './store'
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { Icreateable } from './lib/rx-react/store'
+import { Icreateable } from './store'
 
 
 interface Iprops<U extends Icreateable<any>> {
