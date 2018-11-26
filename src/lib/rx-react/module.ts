@@ -6,19 +6,24 @@ export interface Ioptions {
     singleton?: boolean
     keepAlive?: boolean
 }
-const map: { [name: string]: any } = {}
+
 
 export class Module {
-    constructor(provider: Array<{ new(): any }>) {
-
+    map:  { [name: string]: any } = {}
+    Factors: { [name: string]: any } = {}
+    constructor(providers: Array<{ new(): any }> = []) {
+        providers.forEach((provider) => {
+            this.Factors[provider.name] = provider
+        })
     }
-    create<B extends Icreateable<any>>(Factor: { new(): B }): B {
-        const cache = map[Factor.name]
+    create(factorName: string) {
+        const cache = this.map[factorName]
         if (cache) {
             return cache;
         }
+        const Factor = this.Factors[factorName]
         const instance = new Factor()
-        map[Factor.name] = instance
+        this.map[factorName] = instance
         return instance
     }
 

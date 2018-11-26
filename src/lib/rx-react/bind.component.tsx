@@ -21,7 +21,7 @@ class Bind<U extends Icreateable<any>> extends React.PureComponent<Iprops<U>, { 
     constructor(props: Iprops<U>) {
         super(props)
         const { $ } = this.props
-        this.instance = module.create($)
+        this.instance = module.create($.name)
         this.didMount$.pipe(
             switchMap(
                 didmount => iif(
@@ -33,7 +33,6 @@ class Bind<U extends Icreateable<any>> extends React.PureComponent<Iprops<U>, { 
             catchError<any, { err: Error }>(err => of({ err }))
         ).subscribe(
             ({ payload, err }) => {
-                console.log({ payload, err })
                 this.setState({ payload, err })
             }
         )
@@ -42,6 +41,7 @@ class Bind<U extends Icreateable<any>> extends React.PureComponent<Iprops<U>, { 
         this.didMount$.next(true)
     }
     componentWillUnmount() {
+        this.didMount$.next(false)
         this.didMount$.complete()
     }
     render() {
