@@ -1,6 +1,6 @@
 import { Icreateable } from './lib/rx-react/store'
 import { timer, Subject, merge, of, Observable } from 'rxjs'
-import { mapTo, map, catchError, startWith } from 'rxjs/operators'
+import { mapTo, map, catchError, startWith, tap, shareReplay } from 'rxjs/operators'
 
 
 const existUsers = [
@@ -41,7 +41,8 @@ export class User extends Icreateable<ImaybeUser> {
         this.defaultUser,
         this.shiftUser$
     ).pipe(
-        startWith<ImaybeUser>({ isLoading: true })
+        startWith<ImaybeUser>({ isLoading: true }),
+        shareReplay(1)
     )
     public shiftUser(id: number) {
         this.shiftUserId$.next(id)

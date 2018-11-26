@@ -8,9 +8,11 @@ import { Icreateable } from './lib/rx-react/store'
 interface Iprops<U extends Icreateable<any>> {
     $: { new(): U }
     options?: Ioptions
-    children: (err: Error | undefined, payload: U extends Icreateable<infer T> ? T : never, instance: U) => React.ReactElement<any>
-
-    // children: (err: Error | undefined, payload: T, instance: B) => React.ReactElement<any>
+    children: (
+        err: Error | undefined,
+        payload: (U extends Icreateable<infer T> ? T : never) | undefined,
+        instance: U
+    ) => React.ReactElement<any>
 }
 
 const defaultOptions: Ioptions = { singleton: true, keepAlive: false }
@@ -34,9 +36,7 @@ class Bind<U extends Icreateable<any>> extends React.PureComponent<Iprops<U>, { 
             map<any, { payload: any }>(payload => ({ payload })),
             catchError<any, { err: Error }>(err => of({ err }))
         ).subscribe(
-            ({ payload, err }) => {
-                this.setState({ payload, err })
-            }
+            ({ payload, err }) => this.setState({ payload, err })
         )
     }
     componentDidMount() {
@@ -48,7 +48,7 @@ class Bind<U extends Icreateable<any>> extends React.PureComponent<Iprops<U>, { 
     render() {
         const { payload, err } = this.state
         const { children } = this.props
-        return payload ? children(err, payload, this.instance) : "";
+        return payload || err ? children(err, payload, this.instance) : "";
     }
 }
 
