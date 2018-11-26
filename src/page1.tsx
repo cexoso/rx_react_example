@@ -8,7 +8,7 @@ class Page1 extends React.Component<any, any> {
     render() {
         return (
             <div>
-                <Link to='Page2'>
+                <Link to='./Page2'>
                     Page2
                 </Link>
                 <Bind $={User}>

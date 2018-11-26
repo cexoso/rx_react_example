@@ -6,11 +6,11 @@ import Page2 from './page2';
 class App extends React.Component {
     render() {
         return (
-            <Router basename="rx_react_example">
+            <Router basename="/rx_react_example">
                 <Switch>
                     <Route path="/Page1" component={Page1} />
                     <Route path="/Page2" component={Page2} />
-                    <Redirect to="Page1" />
+                    <Redirect to="./Page1" />
                 </Switch>
             </Router>
         );
