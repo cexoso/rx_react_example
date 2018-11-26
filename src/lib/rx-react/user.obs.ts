@@ -1,4 +1,4 @@
-import { Icreateable } from './store'
+import { Icreateable } from './module'
 import { timer, Subject, merge, of, Observable } from 'rxjs'
 import { mapTo, map, catchError, startWith, tap, shareReplay } from 'rxjs/operators'
 
