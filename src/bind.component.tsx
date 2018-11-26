@@ -36,7 +36,10 @@ class Bind<U extends Icreateable<any>> extends React.PureComponent<Iprops<U>, { 
             map<any, { payload: any }>(payload => ({ payload })),
             catchError<any, { err: Error }>(err => of({ err }))
         ).subscribe(
-            ({ payload, err }) => this.setState({ payload, err })
+            ({ payload, err }) => {
+                console.log({ payload, err })
+                this.setState({ payload, err })
+            }
         )
     }
     componentDidMount() {

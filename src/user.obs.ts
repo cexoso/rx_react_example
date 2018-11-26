@@ -30,12 +30,11 @@ export class User extends Icreateable<ImaybeUser> {
             id => {
                 const user = existUsers.find(x => x.user_id === id)
                 if (!user) {
-                    throw new Error('user not found')
+                    return { err: new Error('user not found') }
                 }
                 return { payload: user };
             }
-        ),
-        catchError((err: Error) => of<ImaybeUser>({ err }))
+        )
     )
     public obs = merge(
         this.defaultUser,
