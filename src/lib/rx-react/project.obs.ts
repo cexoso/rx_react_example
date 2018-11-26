@@ -20,7 +20,7 @@ export interface ImaybeProject {
     isLoading?: boolean
 }
 export class Project extends Icreateable<ImaybeProject> {
-    private user$: User = module.create(User.name)
+    private user$ = module.create(User)
     public obs = this.user$.obs.pipe(
         switchMap<any, ImaybeProject>(mUser => {
             if (mUser.err || mUser.isLoading) {

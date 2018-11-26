@@ -9,21 +9,20 @@ export interface Ioptions {
 
 
 export class Module {
-    map:  { [name: string]: any } = {}
+    map = new Map()
     Factors: { [name: string]: any } = {}
     constructor(providers: Array<{ new(): any }> = []) {
         providers.forEach((provider) => {
             this.Factors[provider.name] = provider
         })
     }
-    create(factorName: string) {
-        const cache = this.map[factorName]
+    create<B>(Factor: { new(): B }): B {
+        const cache = this.map.get(Factor)
         if (cache) {
             return cache;
         }
-        const Factor = this.Factors[factorName]
         const instance = new Factor()
-        this.map[factorName] = instance
+        this.map.set(Factor, instance)
         return instance
     }
 

@@ -21,7 +21,7 @@ class Bind<U extends Icreateable<any>> extends React.PureComponent<Iprops<U>, { 
     constructor(props: Iprops<U>) {
         super(props)
         const { $ } = this.props
-        this.instance = module.create($.name)
+        this.instance = module.create($)
         this.didMount$.pipe(
             switchMap(
                 didmount => iif(
