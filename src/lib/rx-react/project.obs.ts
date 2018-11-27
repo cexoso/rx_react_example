@@ -1,8 +1,8 @@
 import { Icreateable } from './module'
 import { module } from './store'
 import { User } from './user.obs'
-import { mapTo, switchMap, filter, map } from 'rxjs/operators';
-import { of, timer, Observable } from 'rxjs';
+import { mapTo, switchMap, filter, map, shareReplay } from 'rxjs/operators';
+import { of, timer, Observable, concat } from 'rxjs';
 
 const existProject = [
     { proj_id: '1', proj_name: '狗不理包子店' },
@@ -29,7 +29,7 @@ export class Project extends Icreateable<ImaybeProject> {
                     isLoading: mUser.isLoading,
                 })
             }
-            const fakeFetch = timer((Math.random() + 0.5) * 3).pipe(map(
+            const fakeFetch = concat(of({ isLoading: true }), timer((Math.random() + 0.7) * 1000).pipe(map(
                 () => {
                     const uid = mUser.payload.user_id
                     const found = existProject.find(p => p.proj_id === uid)
@@ -39,8 +39,9 @@ export class Project extends Icreateable<ImaybeProject> {
                         return { err: new Error('project no found') }
                     }
                 }
-            ))
+            )))
             return fakeFetch
-        })
+        }),
+        shareReplay(1)
     )
 }
