@@ -6,7 +6,7 @@ import Page2 from './page2';
 class App extends React.Component {
     render() {
         return (
-            <Router basename="/rx_react_example">
+            <Router>
                 <Switch>
                     <Route path="/Page1" component={Page1} />
                     <Route path="/Page2" component={Page2} />
