@@ -1,8 +1,8 @@
 import { Icreateable } from './module'
 import { module } from './store'
 import { User } from './user.obs'
-import { mapTo, switchMap, filter, map, shareReplay } from 'rxjs/operators';
-import { of, timer, Observable, concat } from 'rxjs';
+import { switchMap, map, shareReplay } from 'rxjs/operators';
+import { of, timer, concat } from 'rxjs';
 
 const existProject = [
     { proj_id: '1', proj_name: '狗不理包子店' },

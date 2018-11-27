@@ -1,6 +1,6 @@
 import { Icreateable } from './module'
-import { timer, Subject, merge, of, Observable } from 'rxjs'
-import { mapTo, map, catchError, startWith, tap, shareReplay } from 'rxjs/operators'
+import { timer, Subject, merge } from 'rxjs'
+import { mapTo, map, startWith, shareReplay } from 'rxjs/operators'
 
 
 const existUsers = [
