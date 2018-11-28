@@ -11,7 +11,7 @@ interface Iprops<U extends Icreateable<any>> {
         err: Error | undefined,
         payload: (U extends Icreateable<infer T> ? T : never) | undefined,
         instance: U
-    ) => React.ReactElement<any>
+    ) => React.ReactElement<any> | string
 }
 
 class Bind<U extends Icreateable<any>> extends React.PureComponent<Iprops<U>, { payload?: any, err?: Error }> {
